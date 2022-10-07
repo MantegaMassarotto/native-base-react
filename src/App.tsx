@@ -1,25 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Input, Stack, Box, Button as ButtonNB, IButtonProps, VStack } from "native-base";
+import { memo, useCallback, useState } from "react";
+
+type ButtonProps = IButtonProps & {
+  onPress?: () => void;
+  type?: string;
+  title: string;
+};
+
+const Button = ({ type, title, onPress }: ButtonProps) => {
+  // const onPressIn = useCallback(() => {
+  //   console.log('do');
+  // }, []);
+
+  return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+
+    <ButtonNB onPress={onPress} type={type}>{title}</ButtonNB>
+  );
+};
+
+const ButtonMemo = memo(Button);
 
 function App() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleOnChangeEmail = useCallback((e: any) => {
+    setEmail(e.target.value);
+  }, [])
+
+  const handleOnChangePassword = useCallback((e: any) => {
+    setPassword(e.target.value);
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Stack>
+      <VStack>
+        <Input 
+          nativeID='email'
+          placeholder='email'
+          onChange={handleOnChangeEmail}
+          value={email}
+        />
+        <Input 
+          nativeID='password'
+          placeholder='password'
+          type="password"
+          onChange={handleOnChangePassword}
+          value={password}
+        />
+      </VStack>
+      <Box alignItems="center">
+        <ButtonMemo onPress={() => console.log("hello world")} title="On Press" />
+      </Box>
+    </Stack>
   );
 }
 
