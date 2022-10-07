@@ -1,3 +1,4 @@
+import { useFormik } from "formik";
 import { Input, Stack, Box, Button as ButtonNB, IButtonProps, VStack } from "native-base";
 import { memo, useCallback, useState } from "react";
 
@@ -8,9 +9,6 @@ type ButtonProps = IButtonProps & {
 };
 
 const Button = ({ type, title, onPress }: ButtonProps) => {
-  // const onPressIn = useCallback(() => {
-  //   console.log('do');
-  // }, []);
 
   return (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -22,38 +20,37 @@ const Button = ({ type, title, onPress }: ButtonProps) => {
 
 const ButtonMemo = memo(Button);
 
+const initialValues =  { email: '', password: '' }
+
 function App() {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleOnChangeEmail = useCallback((e: any) => {
-    setEmail(e.target.value);
+  const handleOnSubmit = useCallback(() => {
+    console.log('submit')
   }, [])
 
-  const handleOnChangePassword = useCallback((e: any) => {
-    setPassword(e.target.value);
-  }, [])
+  const { handleSubmit, handleChange, values } = useFormik({ initialValues, onSubmit: handleOnSubmit  })
 
   return (
     <Stack>
       <VStack>
-        <Input 
-          nativeID='email'
-          placeholder='email'
-          onChange={handleOnChangeEmail}
-          value={email}
-        />
-        <Input 
-          nativeID='password'
-          placeholder='password'
-          type="password"
-          onChange={handleOnChangePassword}
-          value={password}
-        />
+        <form onSubmit={handleSubmit}>
+          <Input 
+            nativeID='email'
+            placeholder='email'
+            onChange={handleChange}
+            value={values.email}
+          />
+          <Input 
+            nativeID='password'
+            placeholder='password'
+            type="password"
+            onChange={handleChange}
+            value={values.password}
+          />
+        </form>
       </VStack>
       <Box alignItems="center">
-        <ButtonMemo onPress={() => console.log("hello world")} title="On Press" />
+        <ButtonMemo onPress={handleSubmit} title="On Press" />
       </Box>
     </Stack>
   );
